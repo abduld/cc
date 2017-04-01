@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/andrewchambers/cc/cpp"
-	"github.com/andrewchambers/cc/helper"
 	"github.com/andrewchambers/cc/parse"
+	"github.com/andrewchambers/cc/report"
 	"io"
 	"os"
 )
@@ -37,11 +37,11 @@ func compileFile(path string, out io.Writer) error {
 	}
 	lexer := cpp.Lex(path, f)
 	pp := cpp.New(lexer, nil)
-	toplevels, err := parse.Parse(x64SzDesc, pp)
+	tu, err := parse.Parse(x64SzDesc, pp)
 	if err != nil {
 		return err
 	}
-	return Emit(toplevels, out)
+	return Emit(tu, out)
 }
 
 func main() {
@@ -74,5 +74,8 @@ func main() {
 		}
 	}
 	err = compileFile(input, output)
-	helper.ReportError(err)
+	if err != nil {
+		report.ReportError(err)
+		os.Exit(1)
+	}
 }

@@ -1,66 +1,42 @@
-[![Join the chat at https://gitter.im/andrewchambers/cc](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/andrewchambers/cc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/andrewchambers/cc.svg?branch=master)](https://travis-ci.org/andrewchambers/cc)
+# { "Minimalist", "C", "Compiler"}; /* WIP */
 
-## Project Goals
+![](https://raw.githubusercontent.com/andrewchambers/cc-images/master/Gopher.png)
 
-The goal of the project is to create a minimalist, useful, cross platform C compiler. I'd like to see...
+Artwork by [Egon Elbre](https://twitter.com/egonelbre) based on the [Go gopher](https://blog.golang.org/gopher) by [Renee French](http://reneefrench.blogspot.com/)
 
-- C11 Compatibility.
-- Both Windows and *nix work equally well.
-- Zero config toolchain builds.
-- Zero config cross compilation (Or as close as possible, this includes support libraries like libc).
-- Toolchain builds in the blink of an eye (I usually take a nap between GCC/Clang builds).
-- Good documentation and a low learning curve.
-- A companion assembler/linker to remove the dependence on binutils.
+## Goals
+
 - Aggressive removal of cruft.
-- An SSA optimizing backend AFTER feature completion.
-- Compilation of Go1.4 so we can bootstrap ourselves.
+- Fast.
+- Simple.
 
-## Status
+## Status 
 
-- Currently only x86_64 machines are supported.
-- Currently I run tests on Windows with cygwin, and Arch Linux. Any Linux should work. 
-- Not much works yet, but this will change.
+*NOT UNDER DEVELOPMENT*
 
-It is a work in progress and a hobby project. The test suite is the best idea of what currently works, though other features may be
-partially implemented.
+This compiler has been ported to C here https://github.com/andrewchambers/c where development continues. This was done to allow self hosting far earlier, increase 
+speed, increase portability, and decrease binary size. Interestingly, the C version is less lines of code too.
 
 ## Building
 
-- Install the go compiler, and a working version of gcc (gcc won't be needed in the future).
-- Ensure your ```$GOPATH``` environmental variable is setup correctly.
-- Run the following in a terminal.
-```
-$ mkdir -p $GOPATH/src/github.com/andrewchambers/cc
-$ cd $GOPATH/src/github.com/andrewchambers/cc
-$ git clone https://github.com/andrewchambers/cc
-$ sh ./test.sh
-$ go install ./cmd/x64cc
-$ x64cc -h
-```
+```go get github.com/andrewchambers/cc/cmd/x64cc```
+
+## Contact
+
+[![Join the chat at https://gitter.im/andrewchambers/cc](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/andrewchambers/cc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Hacking
 
 The code is heavily inspired by https://github.com/rui314/8cc as well as http://bellard.org/tcc/. 
 I recommend studying the source code of 8cc before contributing here, as 8cc is currently far more mature.
 
-The compiler is implemented in Go, builds should be quick, and barriers to contribution
-should be kept to a minimum. (If you treat Go as the successor to C while ignoring C++ ;), this makes sense.)
-Go has excellent support for tests, refactoring, analysis, documentation, code coverage, so we should try to use them.
+- The compiler is implemented in Go.
+- The compiler *currenty* does no optimization, this is intentional.
+- Contributions to this project are welcome, I will respond on gitter or via email.
 
-The compiler currenty does no optimization, this is intentional. This may change in the future, but I would
-prefer a slow, but working program, to a broken program. 100 percent test coverage is reachable with a
-simple backend.
+## Bugs
 
-Contributions to this project are welcome, please discuss ideas on the project gitter before commencing work.
-You will probably need to discuss progress/direction for various aspects of the compiler to avoid duplicate/wasted work.
-I will try to maintain a code review culture in order to maintain a high standard of work.
-
-## Bug reports
-
-The compiler is currently so immature that it is trivial to find bugs. I don't need bug reports unless
-you are also willing to fix the bug yourself in a pull request or by emailing a diff. If you want to tackle an issue, be sure to add a
-self contained snippet or file that reproduces the issue.
+Yes.
 
 When the compiler is more mature, we can do automatic bug hunting using the following resources:
 
@@ -70,9 +46,12 @@ When the compiler is more mature, we can do automatic bug hunting using the foll
 
 The bugs can then be automatically reduced to minimal form using http://embed.cs.utah.edu/creduce/ (https://github.com/csmith-project/creduce).
 
-## Fun Ideas
+## Ideas
 - Concurrency using goroutines - C can be compiled a function at a time, so there is a lot of room for this.
-- Compile toolchain to javascript using Gopherjs, cross compile using javascript.
+- Compile toolchain to javascript using Gopherjs, make a demo site.
 - Implement a companion Go -> C compiler, then compile ourselves with it.
 - Allow preprocessor include paths from archives to allow sdk's to be packaged as a single binary + archive.
 - Implement a backend that is similar to llvm, expose this as a library for other language frontends.
+- A companion assembler/linker to remove the dependence on binutils.
+- An SSA optimizing backend.
+- Compilation of Go1.4 so we can bootstrap ourselves.

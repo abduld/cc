@@ -11,6 +11,11 @@ type Expr interface {
 	GetType() CType
 }
 
+type TranslationUnit struct {
+	TopLevels      []Node
+	AnonymousInits []Node
+}
+
 type Constant struct {
 	Val  int64
 	Pos  cpp.FilePos
@@ -53,12 +58,12 @@ type Cast struct {
 func (c *Cast) GetType() CType      { return c.Type }
 func (c *Cast) GetPos() cpp.FilePos { return c.Pos }
 
-type CompndStmt struct {
+type Block struct {
 	Pos  cpp.FilePos
 	Body []Node
 }
 
-func (c *CompndStmt) GetPos() cpp.FilePos { return c.Pos }
+func (b *Block) GetPos() cpp.FilePos { return b.Pos }
 
 type EmptyStmt struct {
 	Pos cpp.FilePos
@@ -166,7 +171,7 @@ type Selector struct {
 	Op      cpp.TokenKind
 	Pos     cpp.FilePos
 	Type    CType
-	Operand Node
+	Operand Expr
 	Sel     string
 }
 
@@ -176,24 +181,24 @@ func (s *Selector) GetPos() cpp.FilePos { return s.Pos }
 type Binop struct {
 	Op   cpp.TokenKind
 	Pos  cpp.FilePos
-	L    Node
-	R    Node
+	L    Expr
+	R    Expr
 	Type CType
 }
 
 func (b *Binop) GetType() CType      { return b.Type }
 func (b *Binop) GetPos() cpp.FilePos { return b.Pos }
 
-type Function struct {
+type CFunc struct {
 	Name         string
 	Pos          cpp.FilePos
-	FuncType     *FunctionType
+	FuncType     *CFuncT
 	ParamSymbols []*LSymbol
 	Body         []Node
 }
 
-func (f *Function) GetType() CType      { return f.FuncType }
-func (f *Function) GetPos() cpp.FilePos { return f.Pos }
+func (f *CFunc) GetType() CType      { return f.FuncType }
+func (f *CFunc) GetPos() cpp.FilePos { return f.Pos }
 
 type Call struct {
 	Pos      cpp.FilePos
@@ -206,11 +211,10 @@ func (c *Call) GetType() CType      { return c.Type }
 func (c *Call) GetPos() cpp.FilePos { return c.Pos }
 
 type DeclList struct {
-	Pos         cpp.FilePos
-	Storage     SClass
-	Symbols     []Symbol
-	Inits       []Node
-	FoldedInits []ConstantValue
+	Pos     cpp.FilePos
+	Storage SClass
+	Symbols []Symbol
+	Inits   []Expr
 }
 
 func (d *DeclList) GetPos() cpp.FilePos { return d.Pos }

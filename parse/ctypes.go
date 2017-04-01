@@ -32,7 +32,7 @@ func (s *CStruct) FieldType(n string) CType {
 	return nil
 }
 
-type FunctionType struct {
+type CFuncT struct {
 	RetType  CType
 	ArgTypes []CType
 	ArgNames []string
@@ -97,6 +97,16 @@ func IsScalarType(t CType) bool {
 
 func IsArrType(t CType) bool {
 	_, ok := t.(*Array)
+	return ok
+}
+
+func IsCFuncType(t CType) bool {
+	_, ok := t.(*CFuncT)
+	return ok
+}
+
+func IsStructType(t CType) bool {
+	_, ok := t.(*CStruct)
 	return ok
 }
 
